@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createGoogleGenerativeAI } from "@ai-sdk/google"
 import { generateText } from "ai"
 
-const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+const apiKey = "AIzaSyB4p0uqcvltps4KLKUh7nkJwsIZ-Xhdg9c";
 
 if (!apiKey) {
     throw new Error("Google Generative AI API key is missing. Check .env.local file.");
