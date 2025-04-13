@@ -46,7 +46,7 @@ export const ChatBoat = () => {
                     { 
                         id: random.toString(), 
                         role: "assistant", 
-                        content: "Something went wrong, please try again later." 
+                        content: "Something went wrong, please try again later. from the client side" 
                     },
                 ]);
                 return;
@@ -68,7 +68,7 @@ export const ChatBoat = () => {
                 { 
                     id: random.toString(), 
                     role: "assistant", 
-                    content: "Something went wrong, please try again later." 
+                    content: "Something went wrong, please try again later. from the client side" 
                 },
             ]);
             console.log("this is the error " , error)
