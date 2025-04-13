@@ -9,13 +9,12 @@ import { Title } from './Title';
 import { Publish } from './Publish';
 import { Menu } from './Menu';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
-interface props {
-    id: Id<"documents">
-}
 
-export const NavBar = ({ id }: props) => {
-    const document = useQuery(api.file.getById, { id: id as Id<"documents"> });
+export const NavBar = () => {
+    const params = useParams()
+    const document = useQuery(api.file.getById, { id: params.id as Id<"documents"> });
 
     if (document === undefined) {
         return (

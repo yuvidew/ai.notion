@@ -8,20 +8,20 @@ import { Editor } from '@/components/Editor';
 import { ToolBar } from './ToolBar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Cover } from '@/components/Cover';
+import { useParams } from 'next/navigation';
 
-interface WorkPageProps {
-    id :Id<"documents">
-}
 
-export const WorkPage = ({id} : WorkPageProps) => {
-    const document = useQuery(api.file.getById, { id: id as Id<"documents"> });
+
+export const WorkPage = () => {
+    const params = useParams()
+    const document = useQuery(api.file.getById, { id: params.id as Id<"documents"> });
     // const Editor = useMemo(() => dynamic(() => import('@/components/Editor').then((mod) => mod.Editor), { ssr: false }), []);
 
     const update = useMutation(api.file.update);
 
     const onChange = (document : string) => {
         update({
-            id,
+            id : params.id as Id<"documents">,
             document
         })
     }

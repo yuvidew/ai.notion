@@ -12,10 +12,10 @@ import { Button } from "@/components/ui/button";
 import { Send, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-import { ChatMessage } from "@/components/ui/chat-message";
 import Spinner from "@/components/Spinner";
 import axios from "axios";
 import { Hint } from "@/components/Hint";
+import { ChatMsg } from "@/components/ChatMsg";
 type MessageType = {
     id: string;
     role: string;
@@ -90,15 +90,12 @@ export const ChatBoat = () => {
                             <CardTitle className="text-sm font-medium">Notion Ai</CardTitle>
                         </div>
                     </CardHeader>
-                    <CardContent className="h-[80%] overflow-y-auto hide-scrollbar">
+                    <CardContent className="h-[80%] overflow-y-auto hide-scrollbar p-2">
                         {messages.map((msg , index) => (
-                            <ChatMessage
-                                key={`${msg.id}-${index}`}
-                                id={msg.id}
+                            <ChatMsg
+                                key={msg.id + index}
                                 role={msg.role}
                                 content={msg.content}
-                                createdAt={new Date()}
-                                showTimeStamp
                             />
                         ))}
                     </CardContent>

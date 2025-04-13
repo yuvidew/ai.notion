@@ -8,19 +8,18 @@ import { Editor } from '@/components/Editor';
 import { ToolBar } from '@/app/(root)/document/_components/ToolBar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Cover } from '@/components/Cover';
+import { useParams } from 'next/navigation';
 
-interface WorkPageProps {
-    id :Id<"documents">
-}
 
-export const WorkPage = ({id} : WorkPageProps) => {
-    const document = useQuery(api.file.getById, { id: id as Id<"documents"> });
+export const WorkPage = () => {
+    const params = useParams()
+    const document = useQuery(api.file.getById, { id: params.id as Id<"documents"> });
 
     const update = useMutation(api.file.update);
 
     const onChange = (content : string) => {
         update({
-            id,
+            id : params.id as Id<"documents">,
             document : content
         })
     }
