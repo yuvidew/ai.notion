@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import React, { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { formatDistanceToNow } from "date-fns";
@@ -11,6 +10,7 @@ import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import { useMutation } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
+import { useRouter } from "next/navigation";
 
 interface cardProps {
     id: Id<"documents">;
@@ -21,7 +21,6 @@ interface cardProps {
     orgId: string;
     createdAt: number;
     isPinned: boolean;
-    type : string;
 }
 
 export const FileCard = ({
@@ -33,10 +32,9 @@ export const FileCard = ({
     orgId,
     createdAt,
     isPinned,
-    type,
 }: cardProps) => {
     const { userId } = useAuth();
-
+    const router = useRouter();
     const authorLabel = userId == authorId ? "You" : authorName;
     const createAtLabel = formatDistanceToNow(createdAt, {
         addSuffix: true,
@@ -48,44 +46,42 @@ export const FileCard = ({
 
     const toggleFavorite = async () => {
         try {
-            
+
             if (isPinned) {
-                await onUnSaveMutation({id , orgId})
+                await onUnSaveMutation({ id, orgId })
                 toast.success("Unpinned successfully")
-            }else{
-                await onSaveMutation({id , orgId})
+            } else {
+                await onSaveMutation({ id, orgId })
                 toast.success("Pinned successfully");
             }
 
-        } catch{
+        } catch {
             toast.error("Something went wrong");
-        } finally{
+        } finally {
             setIsProcessing(false)
         }
     };
 
     return (
-        <Link href={`/board/${id}`}>
-            <div className=" group aspect-[100/127] border rounded-lg flex flex-col justify-between overflow-hidden">
-                <div className="relative flex-1 bg-amber-50 dark:bg-stone-700">
-                    <Image src={imageUrl} alt={title} fill className=" object-fit" />
-                    <div className=" opacity-0 group-hover:opacity-50 transition-opacity h-full w-full bg-black" />
-                    <Action id={id} title={title} type = {type} side="right">
-                        <button className=" absolute z-50 top-1 right-1">
-                            <MoreHorizontal className="text-white opacity-75 hover:opacity-100 transition-opacity" />
-                        </button>
-                    </Action>
-                </div>
-                <Footer
-                    isPinned={isPinned}
-                    title={title}
-                    authorLabel={authorLabel}
-                    createdAtLabel={createAtLabel}
-                    disabled={isProcessing}
-                    onClick={toggleFavorite}
-                />
+        <div onClick={() => router.push(`/document/${id}`)} className=" group aspect-[100/127] border rounded-lg flex flex-col justify-between overflow-hidden">
+            <div className="relative flex-1 bg-amber-50 dark:bg-stone-700">
+                <Image src={imageUrl} alt={title} fill className=" object-fit" />
+                <div className=" opacity-0 group-hover:opacity-50 transition-opacity h-full w-full bg-black" />
+                <Action id={id} title={title} type={"document"} side="right">
+                    <button className=" absolute z-50 top-1 right-1">
+                        <MoreHorizontal className="text-white opacity-75 hover:opacity-100 transition-opacity" />
+                    </button>
+                </Action>
             </div>
-        </Link>
+            <Footer
+                isPinned={isPinned}
+                title={title}
+                authorLabel={authorLabel}
+                createdAtLabel={createAtLabel}
+                disabled={isProcessing}
+                onClick={toggleFavorite}
+            />
+        </div>
     );
 };
 

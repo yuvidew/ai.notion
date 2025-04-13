@@ -1,10 +1,15 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
+//it's help to upload image
+export const generateUploadUrl = mutation(async(ctx) => {
+    return await ctx.storage.generateUploadUrl()
+})
+
+// it's help to create new file
 export const create = mutation({
     args: {
         orgId: v.string(),
-        type: v.string()
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity()
@@ -15,7 +20,6 @@ export const create = mutation({
 
         return await ctx.db.insert("documents", {
             title: "Untitled",
-            type: args.type,
             orgId: args.orgId,
             authorId: identity.subject,
             authorName: identity.name!,
@@ -51,32 +55,84 @@ export const create = mutation({
 })
 
 // it's help to update the title
-
 export const update = mutation({
-    args : { id: v.id("documents"), title: v.string()},
+    args : { 
+        id: v.id("documents"), 
+        title:v.optional(v.string()),
+        isPublished : v.optional(v.boolean()),
+        document : v.optional(v.string()),
+        coverImage : v.optional(v.string()),
+        icon : v.optional(v.string()),
+    },
     handler : async (ctx , args) => {
         const identity = await ctx.auth.getUserIdentity();
-
 
         if (!identity) {
             throw new Error("Unauthorized")
 
         }
 
-        const title = args.title.trim();
+        const {id , ...rest} = args;
 
-        if (!title) {
-            throw new Error("Title is required")
-        }
+        const existingDocument = await ctx.db.get(id);
 
-        if (title.length > 50) {
-            throw new Error("Title cannot be longer than 50 characters")
-
+        if(!existingDocument){
+            throw new Error("Not found")
         }
 
         return await ctx.db.patch(args.id, {
-            title: args.title
+            ...rest
         })
+    }
+})
+
+// it's help to remove Icon
+export const removeIcon = mutation({
+    args : {
+        id : v.id("documents")
+    },
+    handler : async (ctx , args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if(!identity) {
+            throw new Error('Unauthorized');
+        }
+
+        const existingDocument = await ctx.db.get(args.id)
+
+        if(!existingDocument){
+            throw new Error("Not found")
+        }
+
+        const result = await ctx.db.patch(args.id , {
+            icon : undefined
+        })
+
+        return result
+    }
+})
+
+// it's help to remove image
+export const removeCoverImage = mutation({
+    args : {
+        id : v.id("documents")
+    },
+    handler : async (ctx , args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if(!identity) {
+            throw new Error('Unauthorized');
+        }
+
+        const existingDocument = await ctx.db.get(args.id)
+
+        if(!existingDocument){
+            throw new Error("Not found")
+        }
+
+        const result = await ctx.db.patch(args.id , {
+            coverImage : undefined
+        })
+
+        return result
     }
 })
 
@@ -144,11 +200,19 @@ export const unFavorites = mutation({
 })
 
 //it's help to get all documents
-export const get = query({
+export const getById = query({
     args: { id: v.id("documents") },
     handler: async (ctx, args) => {
-        const document = ctx.db.get(args.id);
+        return await ctx.db.get(args.id);
+    }
+})
 
-        return document
+//it's help to get the image
+export const getImageUrl = mutation({
+    args: {
+        storageId: v.string(),
+    },
+    handler: async (ctx, args) => {
+        return await ctx.storage.getUrl(args.storageId)
     }
 })

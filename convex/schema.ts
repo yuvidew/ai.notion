@@ -6,7 +6,6 @@ export default defineSchema({
         title : v.string(),
         orgId : v.string(),
         authorId : v.string(),
-        type : v.string(),
         authorName : v.string(),
         isPublished : v.boolean(),
         document : v.optional(v.string()),
@@ -16,7 +15,6 @@ export default defineSchema({
     })
     .index("by_org" , ["orgId"])
     .index("by_org_pined" , ["orgId" , "isPined"])
-    .index("by_org_type" , ["orgId" , "type"])
     .searchIndex("search_title" , {
         searchField : "title",
         filterFields: ["orgId"]

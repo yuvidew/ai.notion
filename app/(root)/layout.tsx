@@ -5,8 +5,7 @@ import {
     SidebarInset,
     SidebarProvider,
 } from "@/components/ui/sidebar"
-import { Header } from './_components/Header'
-import { CreateNewTeam } from '@/components/CreateNewTeam';
+import { ModalProvider } from '@/components/providers/ModalProvider';
 
 
 export default function DashboardLayout({
@@ -17,10 +16,10 @@ export default function DashboardLayout({
     return (
         <SidebarProvider >
             <AppSidebar />
-            <SidebarInset>
-                <Header />
-                {children}
-                <CreateNewTeam />
+            <SidebarInset className='bg-[#1f1f1f]'>
+                <ModalProvider>
+                    {children}
+                </ModalProvider>
             </SidebarInset>
         </SidebarProvider>
     )

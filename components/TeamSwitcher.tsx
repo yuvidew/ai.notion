@@ -155,6 +155,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import Spinner from "./Spinner";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const TeamMembers = ({
     id,
@@ -245,12 +246,14 @@ const Invitations = ({
     email: string;
     onAccept: () => void;
 }) => {
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handelAccept = async () => {
         setIsLoading(true);
         await onAccept();
         window.location.reload();
+        router.push("/");
         setIsLoading(false);
     };
     return (

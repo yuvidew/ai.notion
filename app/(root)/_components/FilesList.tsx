@@ -6,34 +6,16 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { FileCard } from "./FileCard";
-import { FileStack, Frame, Pin, Plus } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { CreateNewFile } from "@/components/CreateNewFile";
+import { FileStack, Pin,} from "lucide-react";
 import { EmptySearch } from "./EmptySearch";
 import { EmptyPinned } from "./EmptyPinned";
 import { useSearchParams } from "next/navigation";
+import { NewFileBtn } from "@/components/CreateNewFile";
 
 interface BoardListProps {
     orgId: Id<"documents">;
 }
 
-const NewFileBtn = ({orgId} : {orgId : string}) => {
-    return(
-        <CreateNewFile orgId = {orgId} >
-            <button
-                className={cn(
-                    "col-span-1 aspect-[100/127] dark:bg-stone-700 bg-stone-200 rounded-lg hover:bg-stone-300 dark:hover:bg-stone-800 flex flex-col items-center justify-center py-6",
-                )}
-            >
-                <div/>
-                <Plus
-                    className="h-10 w-10 dark:text-white text-stone-700 stroke-1"
-                />
-                <p className="text-sm dark:text-white text-stone-700 font-light" >New board</p>
-            </button>
-        </CreateNewFile>
-    )
-}
 
 export const FilesList = ({ orgId }: BoardListProps) => {
     const params = useSearchParams()
@@ -59,14 +41,7 @@ export const FilesList = ({ orgId }: BoardListProps) => {
                     <div className="flex items-center gap-2">
                         <FileStack className="w-5 h-5" />
                         <p className=" text-stone-600 dark:text-stone-300  font-medium text-xl">
-                            Docs
-                        </p>
-
-                        <span>&</span>
-
-                        <Frame className="w-5 h-5" />
-                        <p className=" text-stone-600 dark:text-stone-300  font-medium text-xl">
-                            Projects
+                            Documents
                         </p>
                     </div>
                 )}
@@ -108,14 +83,7 @@ export const FilesList = ({ orgId }: BoardListProps) => {
                     <div className="flex items-center gap-2">
                         <FileStack className="w-5 h-5" />
                         <p className=" text-stone-600 dark:text-stone-300  font-medium text-xl">
-                            Docs
-                        </p>
-
-                        <span>&</span>
-
-                        <Frame className="w-5 h-5" />
-                        <p className=" text-stone-600 dark:text-stone-300  font-medium text-xl">
-                            Projects
+                            Documents
                         </p>
                     </div>
                 )}
@@ -133,7 +101,6 @@ export const FilesList = ({ orgId }: BoardListProps) => {
                         createdAt={file._creationTime}
                         orgId={file.orgId}
                         isPinned={file.isPined}
-                        type = {file.type}
                     />
                 ))}
             </div>

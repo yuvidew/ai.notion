@@ -1,102 +1,52 @@
 "use client"
-import React, { ReactNode, useState } from 'react'
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { BookOpen, Frame } from "lucide-react";
+import React from 'react'
+
+import { Plus } from "lucide-react";
 import { api } from "@/convex/_generated/api";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import Spinner from "@/components/Spinner";
+import { cn } from '@/lib/utils';
 
-interface CreateNewFileProps {
-    children : ReactNode,
-    orgId : string
-} 
+interface NewFileBtnProps {
+    orgId: string
+}
 
-export const CreateNewFile = (
+export const NewFileBtn = (
     {
-        children,
         orgId
-    }:CreateNewFileProps
+    }: NewFileBtnProps
 ) => {
     const router = useRouter();
     const { mutate } = useApiMutation(api.file.create);
-    const [isLoading, setIsLoading] = useState("");
-    const onCreate = async (type: string) => {
+    const onCreate = async () => {
         if (!orgId) return;
 
-        setIsLoading(type);
 
         try {
             const id = await mutate({
                 orgId,
-                type,
             });
 
             toast.success("File created");
-            router.push(`/${type}/${id}`);
+            router.push(`/document/${id}`);
         } catch (error) {
             console.log(error);
             toast.error("Failed to create file");
-        } finally {
-            setIsLoading("");
-        }
+        } 
     };
     return (
-        <Dialog>
-                <DialogTrigger asChild >
-                    {children}
-                </DialogTrigger>
-                <DialogContent>
-                    <DialogHeader className="flex flex-col">
-                        <DialogTitle className="font-medium text-lg">
-                            Chose your file type
-                        </DialogTitle>
-                        <DialogDescription className=" text-muted-foreground text-sm mb-2" >
-                        Start by creating a file for your team
-                        </DialogDescription>
-                        <div className="flex items-center gap-2">
-                            <Button
-                                variant={"default"}
-                                size={"lg"}
-                                className="flex items-center w-[50%] cursor-pointer"
-                                onClick={() => onCreate("document")}  
-                            >
-                                {isLoading !== "document" ? (
-                                    <>
-                                        <BookOpen />
-                                        Document
-                                    </>
-                                ) : (
-                                    <Spinner  />
-                                )}
-                            </Button>
-                            <Button
-                                variant={"default"}
-                                size={"lg"}
-                                className="flex items-center w-[50%] cursor-pointer"
-                                onClick={() => onCreate("project")} 
-                            >
-                                {isLoading !== "project" ? (
-                                    <>
-                                        <Frame />
-                                        Project
-                                    </>
-                                ) : (
-                                    <Spinner  />
-                                )}
-                            </Button>
-                        </div>
-                    </DialogHeader>
-                </DialogContent>
-            </Dialog>
+        <button
+            className={cn(
+                "col-span-1 aspect-[100/127] dark:bg-stone-700 bg-stone-200 rounded-lg hover:bg-stone-300 dark:hover:bg-stone-800 flex flex-col items-center justify-center py-6",
+            )}
+            onClick={onCreate}
+        >
+            <div />
+            <Plus
+                className="h-10 w-10 dark:text-white text-stone-700 stroke-1"
+            />
+            <p className="text-sm dark:text-white text-stone-700 font-light" >New board</p>
+        </button>
     )
 }

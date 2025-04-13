@@ -23,17 +23,6 @@ export const get = query({
                 .collect();
         }
 
-        if (args.type) {
-            return await ctx.db
-                .query("documents")
-                .withIndex("by_org_type", (q) =>
-                    q
-                    .eq("orgId", args.orgId)
-                    .eq("type", args.type!)
-                )
-                .collect();
-        }
-
 
         if (args.favorites == true) {
             return await ctx.db

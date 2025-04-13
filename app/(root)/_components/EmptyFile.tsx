@@ -4,10 +4,32 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 import { useOrganization } from "@clerk/nextjs";
-import { CreateNewFile } from "@/components/CreateNewFile";
+import { useApiMutation } from "@/hooks/useApiMutation";
+import { api } from "@/convex/_generated/api";
+import { useRouter } from "next/navigation";
+import { Id } from "@/convex/_generated/dataModel";
+import { toast } from "sonner";
 
 export const EmptyFile = () => {
     const { organization } = useOrganization();
+    const { mutate } = useApiMutation(api.file.create);
+    const router = useRouter();
+
+    const onCreate = async (orgId : Id<"documents"> | string) => {
+        if (!orgId) return;
+
+        try {
+            const id = await mutate({
+                orgId,
+            });
+
+            toast.success("File created");
+            router.push(`/document/${id}`);
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to create file");
+        } 
+    };
 
     return (
         <section className="flex h-full flex-col items-center justify-center">
@@ -31,11 +53,9 @@ export const EmptyFile = () => {
             <br />
             {
                 organization && (
-                <CreateNewFile orgId={organization?.id} >
-                    <Button size={"lg"} variant={"default"} className="cursor-pointer">
+                    <Button onClick={() => onCreate(organization?.id)} size={"lg"} variant={"default"} className="cursor-pointer">
                         Create file
                     </Button>
-                </CreateNewFile>
                 )
             }
         </section>

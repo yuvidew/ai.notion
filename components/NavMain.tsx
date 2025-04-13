@@ -53,6 +53,7 @@ export const NavMain = ({ orgId }: { orgId: Id<"documents"> | string }) => {
                     key={document.title}
                     asChild
                     className="group/collapsible"
+                    open={true}
                 >
                     <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
@@ -76,9 +77,10 @@ export const NavMain = ({ orgId }: { orgId: Id<"documents"> | string }) => {
                                 )}
 
                                 {data?.map((item) => (
-                                    <SidebarMenuSubItem key={item._id}>
+                                    <SidebarMenuSubItem key={item._id} className="flex items-center gap-x-2 truncate w-[70%]">
+                                        {!!item.icon && <p>{item.icon}</p>}
                                         <SidebarMenuSubButton asChild>
-                                            <a href={`/${item.type}/${item._id}`}>
+                                            <a href={`/document/${item._id}`}>
                                                 <span>{item.title}</span>
                                             </a>
                                         </SidebarMenuSubButton>

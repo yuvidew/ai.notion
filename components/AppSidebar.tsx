@@ -13,7 +13,6 @@ import {
     SidebarHeader,
     SidebarRail,
 } from "@/components/ui/sidebar"
-import { NavProjects } from "./NavProjects"
 import { useOrganization } from "@clerk/nextjs"
 
 
@@ -30,7 +29,6 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
                 {organization?.id && (
                     <>
                     <NavMain orgId={organization?.id} />
-                    <NavProjects orgId={organization?.id} />
                     </>
                 )}
             </SidebarContent>
