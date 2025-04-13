@@ -56,7 +56,6 @@ export const CoverImageModels = () => {
     const onUpload = async () => {
         if (url) {
             try {
-                toast.loading("Uploading image...");
                 await update({
                     id: params.id as Id<"documents">,
                     coverImage: url,
