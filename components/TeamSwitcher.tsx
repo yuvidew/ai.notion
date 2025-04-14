@@ -1,137 +1,8 @@
-// "use client"
-
-// import * as React from "react"
-// import { ChevronsUpDown, Plus } from "lucide-react"
-
-// import {
-//     SidebarMenu,
-//     SidebarMenuButton,
-//     SidebarMenuItem,
-//     // useSidebar,
-// } from "@/components/ui/sidebar"
-// import { CreateNewTeam } from "./CreateNewTeam"
-// import { Button } from "@/components/ui/button"
-// import {
-//     Collapsible,
-//     CollapsibleContent,
-//     CollapsibleTrigger,
-// } from "@/components/ui/collapsible"
-// import { Separator } from "./ui/separator"
-
-// export function TeamSwitcher({
-//     teams,
-// }: {
-//     teams: {
-//         name: string
-//         logo: React.ElementType
-//         plan: string
-//     }[]
-// }) {
-//     const [activeTeam, setActiveTeam] = React.useState(teams[0])
-//     const [isOpen, setIsOpen] = React.useState(false)
-
-//     if (!activeTeam) {
-//         return null
-//     }
-
-//     return (
-//         <SidebarMenu>
-//             <SidebarMenuItem>
-//                 <Collapsible
-//                     open={isOpen}
-//                     onOpenChange={setIsOpen}
-//                     className="w-full space-y-2"
-//                 >
-//                     <SidebarMenuButton
-//                         size="lg"
-//                         className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground "
-//                     >
-//                         <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-//                             <activeTeam.logo className="size-4" />
-//                         </div>
-//                         <div className="grid flex-1 text-left text-sm leading-tight">
-//                             <span className="truncate font-semibold">
-//                                 {activeTeam.name}
-//                             </span>
-//                             <span className="truncate text-xs">{activeTeam.plan}</span>
-//                         </div>
-//                         <CollapsibleTrigger asChild>
-//                             <Button variant="ghost" size="sm">
-//                                 <ChevronsUpDown className="h-4 w-4" />
-//                                 <span className="sr-only">Toggle</span>
-//                             </Button>
-//                         </CollapsibleTrigger>
-//                     </SidebarMenuButton>
-//                     <div className="px-3 flex flex-col gap-1">
-//                         {teams.map((team) => (
-//                             <CollapsibleContent
-//                                 key={team.name}
-//                                 onClick={() => setActiveTeam(team)}
-//                                 className="space-y-2 flex items-center gap-2 hover:bg-stone-800 px-2 py-1 rounded-sm cursor-pointer"
-//                             >
-//                                 <div className="flex size-6 items-center justify-center rounded-sm border">
-//                                     <team.logo className="size-4 shrink-0" />
-//                                 </div>
-//                                 {team.name}
-//                             </CollapsibleContent>
-//                         ))}
-//                         <Separator/>
-//                         <CreateNewTeam>
-//                             <CollapsibleContent className="gap-2 p-2 cursor-pointer flex items-center hover:bg-stone-700 rounded-sm">
-//                                 <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-//                                     <Plus className="size-4" />
-//                                 </div>
-//                                 <div className="font-medium text-muted-foreground">Add team</div>
-//                             </CollapsibleContent>
-//                         </CreateNewTeam>
-//                     </div>
-//                 </Collapsible>
-//                 {/* <DropdownMenu>
-//                     <DropdownMenuTrigger asChild>
-//                     </DropdownMenuTrigger>
-//                     <DropdownMenuContent
-//                         className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-//                         align="start"
-//                         side={isMobile ? "bottom" : "right"}
-//                         sideOffset={4}
-//                     >
-//                         <DropdownMenuLabel className="text-xs text-muted-foreground">
-//                             Teams
-//                         </DropdownMenuLabel>
-//                         {teams.map((team, index) => (
-//                             <DropdownMenuItem
-//                                 key={team.name}
-//                                 onClick={() => setActiveTeam(team)}
-//                                 className="gap-2 p-2"
-//                             >
-//                                 <div className="flex size-6 items-center justify-center rounded-sm border">
-//                                     <team.logo className="size-4 shrink-0" />
-//                                 </div>
-//                                 {team.name}
-//                                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
-//                             </DropdownMenuItem>
-//                         ))}
-//                         <CreateNewTeam>
-//                             <DropdownMenuItem className="gap-2 p-2 cursor-pointer">
-//                                 <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-//                                     <Plus className="size-4" />
-//                                 </div>
-//                                 <div className="font-medium text-muted-foreground">Add team</div>
-//                             </DropdownMenuItem>
-//                         </CreateNewTeam>
-//                         <DropdownMenuSeparator />
-//                     </DropdownMenuContent>
-//                 </DropdownMenu> */}
-//             </SidebarMenuItem>
-//         </SidebarMenu>
-//     )
-// }
 
 "use client";
 
 import React, { useState } from "react";
 import { ChevronsUpDown, Plus, SquareCheck, Trash2 } from "lucide-react";
-import axios from "axios";
 
 import {
     DropdownMenu,
@@ -156,6 +27,8 @@ import { Button } from "./ui/button";
 import Spinner from "./Spinner";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+// import { useDeleteOrganization } from "@/hooks/useDeleteOrganization";
+import { deleteOrganization } from "@/lib/deleteOrganization";
 
 const TeamMembers = ({
     id,
@@ -173,6 +46,7 @@ const TeamMembers = ({
     setActive: ({ organization }: { organization: string }) => void;
 }) => {
     const [loading, setLoading] = useState<boolean>(false);
+    // const { deleteOrganization } = useDeleteOrganization();
 
     // this function is help to select the team
     const onClick = () => {
@@ -185,15 +59,17 @@ const TeamMembers = ({
     const onDeleteOrganization = async (organizationId: string) => {
         setLoading(true);
         try {
-            const response = await axios.delete("/api/organization", {
-                data: { organizationId },
-            });
+            // const response = await axios.delete("/api/organization", {
+            //     data: { organizationId },
+            // });
 
-            if (response.status !== 200) {
-                toast.error("Failed to delete team.");
-            } else {
+            const result = await deleteOrganization(organizationId);
+
+            if (result.success) {
                 toast.success("Successfully delete the team.");
                 window.location.reload();
+            }else{
+                toast.error(result.error);
             }
         } catch (error) {
             throw error;

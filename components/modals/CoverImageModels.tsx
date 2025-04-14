@@ -39,7 +39,7 @@ interface DefaultGeneratedFile {
     uint8ArrayData?: Uint8Array;
     base64?: string;
     uint8Array?: Uint8Array;
-  }
+}
 
 export const CoverImageModels = () => {
     const params = useParams();
