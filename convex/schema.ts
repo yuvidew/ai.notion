@@ -9,7 +9,7 @@ export default defineSchema({
         authorName : v.string(),
         isPublished : v.boolean(),
         document : v.optional(v.string()),
-        coverImage : v.optional(v.string()),
+        coverImage : v.optional(v.any()),
         icon : v.optional(v.string()),
         isPined : v.boolean(),
     })

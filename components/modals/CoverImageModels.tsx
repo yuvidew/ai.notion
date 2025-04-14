@@ -107,7 +107,7 @@ export const CoverImageModels = () => {
 
 
 
-            // Convert base64 to File object
+           // Convert base64 to File object
             const byteCharacters = atob(result[0].base64Data);
             const byteNumbers = Array.from(byteCharacters, (char) => char.charCodeAt(0));
             const byteArray = new Uint8Array(byteNumbers);
@@ -123,12 +123,12 @@ export const CoverImageModels = () => {
             });
 
             const { storageId } = await res.data;
-            const pdfUrl = await getImageUrl({ storageId: storageId });
+            const imgUrl = await getImageUrl({ storageId: storageId });
 
 
             await update({
                 id: params.id as Id<"documents">,
-                coverImage: pdfUrl || "",
+                coverImage: imgUrl || "",
             })
 
             toast.success("Image is successfully uploaded!");
