@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import { useParams } from "next/navigation";
+import { createGoogleGenerativeAI } from "@ai-sdk/google"
+import { generateText } from "ai"
 import {
     Dialog,
     DialogContent,
@@ -20,6 +22,24 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Id } from "@/convex/_generated/dataModel";
 import Spinner from "../Spinner";
+
+const apiKey = "AIzaSyB4p0uqcvltps4KLKUh7nkJwsIZ-Xhdg9c";
+
+if (!apiKey) {
+    throw new Error("Missing Google Generative AI API Key")
+}
+
+const google = createGoogleGenerativeAI({
+    apiKey
+})
+
+interface DefaultGeneratedFile {
+    base64Data: string;
+    mimeType: string;
+    uint8ArrayData?: Uint8Array;
+    base64?: string;
+    uint8Array?: Uint8Array;
+  }
 
 export const CoverImageModels = () => {
     const params = useParams();
@@ -75,14 +95,17 @@ export const CoverImageModels = () => {
         }
         setIsGenerating(true);
         try {
-            const { data, status } = await axios.post("/api/ai_image", { prompt });
-            const { result } = data;
+            const response = await generateText({
+                model: google('gemini-2.0-flash-exp'),
+                providerOptions: {
+                    google: { responseModalities: ['TEXT', 'IMAGE'] },
+                },
+                prompt: `${prompt}`,
+            })
+
+            const result = response.files as DefaultGeneratedFile[];
 
 
-            if (status !== 201) {
-                toast.error("Failed to generate image");
-                return;
-            }
 
             // Convert base64 to File object
             const byteCharacters = atob(result[0].base64Data);
