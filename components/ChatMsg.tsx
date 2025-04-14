@@ -10,7 +10,7 @@ import Markdown from 'react-markdown';
 interface ChatMsgProps {
 
     role: string,
-    content: string,
+    content: string | null,
 }
 
 export const ChatMsg = ({ role, content }: ChatMsgProps) => {
@@ -24,7 +24,11 @@ export const ChatMsg = ({ role, content }: ChatMsgProps) => {
                         <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                     </Avatar>
                     :
-                    <Sparkles className="w-4 h-4" />
+                    <Avatar className=" w-6 h-6 rounded-full">
+                        <AvatarFallback className="rounded-lg">
+                        <Sparkles className="h-4 w-4" />
+                        </AvatarFallback>
+                    </Avatar>
                 }
             </div>
             <div

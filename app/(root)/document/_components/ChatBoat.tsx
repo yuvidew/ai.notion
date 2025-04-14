@@ -13,71 +13,75 @@ import { Send, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 import Spinner from "@/components/Spinner";
-import axios from "axios";
 import { Hint } from "@/components/Hint";
 import { ChatMsg } from "@/components/ChatMsg";
+
 type MessageType = {
     id: string;
     role: string;
-    content: string;
+    content: string | null;
 };
+
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { generateText } from "ai";
+
+const apiKey = "AIzaSyB4p0uqcvltps4KLKUh7nkJwsIZ-Xhdg9c"; // or use process.env.NEXT_PUBLIC_GEMINI_API_KEY
+
+if (!apiKey) {
+    throw new Error("Google Generative AI API key is missing.");
+}
+
+const google = createGoogleGenerativeAI({
+    apiKey,
+});
+
+const generate = async (prompt: string) : Promise<{ result: string | null; error: string | null }> => {
+    if (!prompt) {
+        return { result: "", error: "Prompt is required." };
+    }
+
+    try {
+        const response = await generateText({
+            model: google("gemini-1.5-pro-latest"),
+            prompt,
+        });
+
+        return { result: response.text, error: "" };
+    } catch (err) {
+        console.error("Generation error:", err);
+        return { result: "", error: "Something went wrong, please try again later." };
+    }
+}
 
 export const ChatBoat = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const [prompt, setPrompt] = useState("");
     const [messages, setMessages] = useState<MessageType[]>([]);
     const random = Math.floor(Math.random() * 100) + 1;
+    const [loading, setLoading] = useState(false);
 
     const onSubmit = async () => {
-        setIsLoading(true);
         setMessages((prev) => [
             ...prev,
             { id: random.toString(), role: "user", content: prompt },
         ]);
-        try {
-            console.log("this is the prompt " , prompt)
-            const { data  , status} = await axios.post("/api/ai", { prompt });
-            console.log(data , status)
-            if(status !== 200){
-                setIsLoading(false);
-                setMessages((prev) => [
-                    ...prev,
-                    { 
-                        id: random.toString(), 
-                        role: "assistant", 
-                        content: "Something went wrong, please try again later. from the client side" 
-                    },
-                ]);
-                return;
-            }
 
-            console.log(data , status)
+        setLoading(true);
 
-            setMessages((prev) => [
-                ...prev,
-                { 
-                    id: random.toString(), 
-                    role: "assistant", 
-                    content: data.result 
-                },
-            ]);
-        } catch (error){
-            setMessages((prev) => [
-                ...prev,
-                { 
-                    id: random.toString(), 
-                    role: "assistant", 
-                    content: "Something went wrong, please try again later. from the client side" 
-                },
-            ]);
-            console.log("this is the error " , error)
+        const {result , error} = await generate(prompt);
 
-        }finally{
-            setIsLoading(false);
-            setPrompt("");
-        }
+        setMessages((prev) => [
+            ...prev,
+            { 
+                id: random.toString() + "assistant", 
+                role: "assistant", 
+                content: result ? result : error, 
+            },
+        ]);
 
+        setLoading(false);
+
+        setPrompt("");
 
     };
     return (
@@ -108,7 +112,7 @@ export const ChatBoat = () => {
                                 onChange={(e) => setPrompt(e.target.value)}
                             />
                             <Button className="rounded-l-none" disabled={!prompt} onClick={onSubmit}>
-                                {isLoading ? <Spinner /> : <Send className="w-5 h-4" />}
+                                {loading ? <Spinner /> : <Send className="w-5 h-4" />}
                             </Button>
                         </div>
                     </CardFooter>
