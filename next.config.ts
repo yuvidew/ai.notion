@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "enduring-reindeer-434.convex.cloud",
       },
+      {
+        protocol: "https",
+        hostname: "utmost-goldfinch-340.convex.cloud",
+      },
     ],
   },
 };
