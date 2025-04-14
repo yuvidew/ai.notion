@@ -27,7 +27,6 @@ import { Button } from "./ui/button";
 import Spinner from "./Spinner";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-// import { useDeleteOrganization } from "@/hooks/useDeleteOrganization";
 import { deleteOrganization } from "@/lib/deleteOrganization";
 
 const TeamMembers = ({
@@ -46,7 +45,6 @@ const TeamMembers = ({
     setActive: ({ organization }: { organization: string }) => void;
 }) => {
     const [loading, setLoading] = useState<boolean>(false);
-    // const { deleteOrganization } = useDeleteOrganization();
 
     // this function is help to select the team
     const onClick = () => {
@@ -59,9 +57,6 @@ const TeamMembers = ({
     const onDeleteOrganization = async (organizationId: string) => {
         setLoading(true);
         try {
-            // const response = await axios.delete("/api/organization", {
-            //     data: { organizationId },
-            // });
 
             const result = await deleteOrganization(organizationId);
 
