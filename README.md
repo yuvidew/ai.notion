@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ai.notion 🧠✨
 
-## Getting Started
+**Ai.notion** is a modern, Notion-style web application enhanced with AI capabilities. Built with the latest web technologies, it allows users to create, organize, and manage their notes and documents seamlessly—while leveraging AI to boost productivity.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- ✍️ **AI-Powered Content Generation** – Write faster and smarter with AI-assisted content creation.
+- 🧾 **Rich Text Editing** – Supports intuitive and flexible note-taking and document editing.
+- 🔐 **Authentication with Clerk** – Secure user registration and login.
+- 🧠 **AI SDK Integration** – Powered by AI SDK for smart suggestions, summaries, and content generation.
+- 🗂 **Real-Time Backend with Convex** – Reactive database and functions with Convex.dev.
+- ⚡ **Next.js + Tailwind CSS** – Blazing fast performance and a beautiful, responsive UI.
+- ✅ **TypeScript** – Fully typed codebase for reliability and maintainability.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠 Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [Next.js](https://nextjs.org/) – React Framework for production
+- [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS
+- [TypeScript](https://www.typescriptlang.org/) – Typed JavaScript
+- [Clerk](https://clerk.dev/) – Authentication & user management
+- [Convex](https://www.convex.dev/) – Real-time backend and database
+- [AI SDK](https://ai.vercel.com) – AI generation and suggestions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📸 Screenshots
 
-## Learn More
+> ![image](https://github.com/user-attachments/assets/e37f030a-65ca-435d-bcb3-8d59b8363e27)
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
