@@ -25,7 +25,7 @@ type MessageType = {
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { generateText } from "ai";
 
-const apiKey = "AIzaSyB4p0uqcvltps4KLKUh7nkJwsIZ-Xhdg9c"; // or use process.env.NEXT_PUBLIC_GEMINI_API_KEY
+const apiKey = "AIzaSyDKFQeHVx2amJv-YIv0FWTwCYul3RMKgB4"; // or use process.env.NEXT_PUBLIC_GEMINI_API_KEY
 
 if (!apiKey) {
     throw new Error("Google Generative AI API key is missing.");
